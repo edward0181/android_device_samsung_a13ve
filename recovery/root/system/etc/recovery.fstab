@@ -1,0 +1,14 @@
+#<src>		<mnt_point>	<type>	<mnt_flags and options>		<fs_mgr_flags>
+system		/system		f2fs	ro,barrier=1	wait,logical,first_stage_mount
+system		/system		ext4	ro,barrier=1	wait,logical,first_stage_mount
+system		/system		erofs	ro,barrier=1	wait,logical,first_stage_mount
+vendor		/vendor		f2fs	ro,barrier=1	wait,logical,first_stage_mount
+product		/product	f2fs	ro,barrier=1	wait,logical,first_stage_mount
+odm			/odm		f2fs	ro,barrier=1	wait,logical,first_stage_mount
+
+#data
+/dev/block/by-name/userdata	/data	f2fs	noatime,nosuid,nodev,discard,noflush_merge,reserve_root=134217,resgid=1065    wait,check,formattable,quota,resize,reservedsize=128m,checkpoint=fs,fileencryption=aes-256-xts
+/dev/block/by-name/md_udc	/metadata	ext4	defaults		wait,first_stage_mount
+
+#misc is gay
+/dev/block/by-name/misc        /misc           emmc        defaults                  recoveryonly

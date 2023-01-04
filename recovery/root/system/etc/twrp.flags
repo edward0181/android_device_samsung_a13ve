@@ -1,0 +1,36 @@
+# Android fstab file.
+# mount point       fstype      device    device2     flags
+
+# Logical partitions
+system		/system		f2fs	wait,logical,first_stage_mount
+system		/system		ext4	wait,logical,first_stage_mount
+system		/system		erofs	wait,logical,first_stage_mount
+vendor		/vendor		f2fs	wait,logical,first_stage_mount
+product		/product	f2fs	wait,logical,first_stage_mount
+odm			/odm		f2fs	wait,logical,first_stage_mount
+
+# Linked partitions
+/system_image   emmc    /dev/block/dm-0							    flags=backup=0;flashimg;display="System Image"
+/vendor_image   emmc    /dev/block/dm-3								flags=backup=0;flashimg;display="Vendor Image"
+/product_image  emmc    /dev/block/dm-2								flags=backup=0;flashimg;display="Product Image"
+/odm_image      emmc    /dev/block/dm-2					            flags=backup=0;flashimg;display="ODM Image"
+
+# Physical partitions
+/boot           emmc    /dev/block/by-name/boot			  flags=backup=1;flahimg;display="Boot partition"
+/recovery       emmc    /dev/block/by-name/recovery       flags=backup=1;flahimg;display="Recovery partition"
+/prism_image    emmc    /dev/block/by-name/prism          flags=backup=1;flashimg;display="Prism Image"
+/optics_image   emmc    /dev/block/by-name/optics         flags=backup=1;flashimg;display="Optics Image"
+/data           f2fs    /dev/block/by-name/userdata       flags=length=-16384;wipeingui;fileencryption=aes-256-xts
+/prism          ext4    /dev/block/by-name/prism          flags=backup=1;display="Prism"
+/optics         ext4    /dev/block/by-name/optics         flags=backup=1;display="Optics"
+/dtbo           emmc    /dev/block/by-name/dtbo           flags=backup=1;display="DTBO"
+/efs            ext4    /dev/block/by-name/efs            flags=backup=1;display="EFS"
+/sec_efs        ext4    /dev/block/by-name/sec_efs        flags=backup=1;display="Sec EFS"
+/modem          emmc    /dev/block/by-name/radio          flags=backup=1;display="Baseband"
+/cache          ext4    /dev/block/by-name/cache          flags=display="Cache";wipeingui
+/misc           emmc    /dev/block/by-name/misc           flags=display="Misc"
+/metadata       ext4    /dev/block/by-name/md_udc	     flags=backup=1;display="Metadata"
+
+# Removable partitions
+/external_sd    vfat    /dev/block/mmcblk1p1 /dev/block/mmcblk1      flags=display="Micro SDcard";storage;wipeingui;removable
+/usb-otg        auto    /dev/block/sda1      /dev/block/sda          flags=display="USB-OTG";storage;wipeingui;removable
