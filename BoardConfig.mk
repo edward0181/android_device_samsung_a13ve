@@ -31,16 +31,14 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := generic
-TARGET_CPU_VARIANT_RUNTIME := cortex-a75
+TARGET_CPU_VARIANT := cortex-a75
 
+# 2nd Architecture
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-2a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a55
-TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
-TARGET_USES_64_BIT_BINDER := true
 
 TARGET_CPU_SMP := true
 ENABLE_CPUSETS := true
@@ -61,8 +59,8 @@ TARGET_BOOTLOADER_BOARD_NAME := mt6768
 TARGET_BOARD_PLATFORM_GPU := mali-g52
 
 # Kernel
-#TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Kernel
-#TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Kernel
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_INCLUDE_RECOVERY_DTBO := true
@@ -87,17 +85,17 @@ BOARD_MKBOOTIMG_ARGS := \
 	--header_version $(BOARD_BOOT_HEADER_VERSION) \
 	--pagesize $(BOARD_KERNEL_PAGESIZE) \
 	--board "SRPVD04A001" \
---dtb $(OUT_DIR)/target/product/a13ve/dtb.img --dtb_offset $(BOARD_DTB_OFFSET) \
+	--dtb $(TARGET_PREBUILT_DTB) --dtb_offset $(BOARD_DTB_OFFSET) \
 	--recovery_dtbo $(BOARD_PREBUILT_DTBOIMAGE)
 
-TARGET_KERNEL_CLANG_COMPILE := true
-TARGET_KERNEL_CONFIG := a13ve_defconfig
-TARGET_KERNEL_SOURCE := kernel/samsung/a13ve
+#TARGET_KERNEL_CLANG_COMPILE := true
+#TARGET_KERNEL_CONFIG := a13ve_defconfig
+#TARGET_KERNEL_SOURCE := kernel/samsung/a13ve
 
-TARGET_KERNEL_ADDITIONAL_FLAGS := \
-    HOSTCFLAGS="-fuse-ld=lld -Wno-unused-command-line-argument"
+#TARGET_KERNEL_ADDITIONAL_FLAGS := \
+#    HOSTCFLAGS="-fuse-ld=lld -Wno-unused-command-line-argument"
 
-#BOARD_CUSTOM_BOOTIMG_MK := $(DEVICE_PATH)/bootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := $(DEVICE_PATH)/bootimg.mk
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
@@ -141,6 +139,7 @@ BOARD_USES_METADATA_PARTITION := true
 
 # TWRP specific build flags
 TW_DEVICE_VERSION := Edward0181-test
+TARGET_USE_CUSTOM_LUN_FILE_PATH := "/config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file"
 TW_THEME := portrait_hdpi
 RECOVERY_SDCARD_ON_DATA := true
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
@@ -161,3 +160,6 @@ TW_NO_LEGACY_PROPS := true
 TW_NO_BIND_SYSTEM := true
 TW_NO_SCREEN_BLANK := true
 TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
+# TWRP Configuration: Logd
+TWRP_INCLUDE_LOGCAT := true
+TARGET_USES_LOGD := true
