@@ -34,7 +34,7 @@ subsystem sound
 /dev/urandom              0666   root       root
 # Make HW RNG readable by group system to let EntropyMixer read it.
 /dev/hw_random            0440   root       system
-/dev/ashmem*              0666   root       root
+/dev/ashmem               0666   root       root
 /dev/binder               0666   root       root
 /dev/hwbinder             0666   root       root
 /dev/vndbinder            0666   root       root
@@ -69,7 +69,6 @@ subsystem sound
 /sys/devices/virtual/usb_composite/*   enable      0664  root   system
 /sys/devices/system/cpu/cpu*   cpufreq/scaling_max_freq   0664  system system
 /sys/devices/system/cpu/cpu*   cpufreq/scaling_min_freq   0664  system system
-/sys/devices/virtual/thermal/cooling_device* cur_state	0664 system system
 
 # Sensor Hub
 /dev/ssp_sensorhub        0660   system     system
@@ -78,13 +77,4 @@ subsystem sound
 /sys/devices/platform/ssp/iio:device*    buffer/enable       0660    system    system
 /sys/devices/platform/ssp/iio:device*    buffer/length       0660    system    system
 /sys/bus/iio/devices/iio:device*    0664   system     radio
-
-# CIQ IQI node
-/dev/ccci_ciq             0660   system     bridge_rw
-
-# S-RIL
-/dev/umts_*               0660   system      radio
-/dev/cdma_*               0660   system      radio
-
-# dev ril bridge
-/dev/drb                  0660   system      radio
+/efs/spu/sensorhub/shub_spu.bin     0660   system     system
