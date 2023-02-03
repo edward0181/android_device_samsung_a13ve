@@ -39,7 +39,7 @@
 
 # Physical partitions - Data
 /metadata		ext4		/dev/block/by-name/md_udc							flags=wipeingui;display="Metadata"
-/data			f2fs		/dev/block/by-name/userdata							flags=encryptable=/dev/block/platform/bootdevice/by-name/metadata;backup=1
+/data			f2fs		/dev/block/by-name/userdata							flags=encryptable=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption;backup=1
 
 # Physical partitions - Important Data - Must Backup
 /efs			ext4		/dev/block/by-name/efs								flags=backup=1;display="Encrypting File System (EFS)"
