@@ -1,0 +1,27 @@
+on post-fs
+# TEEGRIS service
+    mkdir /mnt/vendor/efs/tee 0700 system system
+    mkdir /dev/socket/iwt 0770 system system
+    mkdir /dev/socket/iwt/ca 0770 system system
+    start tz_service
+    wait_for_prop vendor.tzdaemon Ready
+    setprop vendor.TEEGRIS.loaded true
+    write /proc/iccc_ready 1
+    start tzts_service
+    wait_for_prop vendor.tzts_daemon Ready
+
+on post-fs-data
+# TEEGRIS service
+    mkdir /data/vendor/tee 0700 system system
+
+service tz_service /vendor/bin/tzdaemon
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service tzts_service /vendor/bin/tzts_daemon
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
