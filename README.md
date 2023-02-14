@@ -1,0 +1,19 @@
+## a13vensxx-user 13 TP1A.220624.014 A137FXXU1BVL1 release-keys
+- Manufacturer: samsung
+- Platform: mt6768
+- Codename: a13ve
+- Brand: samsung
+- Flavor: a13vensxx-user
+- Release Version: 13
+- Kernel Version: 4.19.191
+- Id: TP1A.220624.014
+- Incremental: A137FXXU1BVL1
+- Tags: release-keys
+- CPU Abilist: armeabi-v7a,armeabi
+- A/B Device: false
+- Locale: en-GB
+- Screen Density: undefined
+- Fingerprint: samsung/a13vensxx/a13ve:12/SP1A.210812.016/A137FXXU1BVL1:user/release-keys
+- OTA version: 
+- Branch: a13vensxx-user-13-TP1A.220624.014-A137FXXU1BVL1-release-keys
+- Repo: samsung_a13ve_dump
