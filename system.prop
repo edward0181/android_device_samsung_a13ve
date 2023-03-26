@@ -12,9 +12,6 @@ ro.board.platform=mt6768
 persist.sys.usb.config=mtp
 sys.usb.controller=musb-hdrc
 
-# Boot devices
-ro.boot.boot_devices=bootdevice,soc/11230000.mmc,11230000.mmc
-
 # Encryption
 #ro.crypto.metadata_init_delete_all_keys.enabled=false
 ro.crypto.volume.filenames_mode=aes-256-cts
