@@ -24,6 +24,7 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
+import /init.recovery.teegris.rc
 
 on init
     # unlink /efs > /mnt/vendor/efs
@@ -41,7 +42,8 @@ on fs
     chown root system /dev/block/param
     chmod 0666 /dev/block/param
 #]
-
+on boot
+	start health-hal-2-1
 on post-fs
     # Support A/B feature for EMMC and UFS boot region
     wait /dev/block/mmcblk0boot0 2
@@ -61,7 +63,5 @@ on post-fs
     symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/by-name/preloader_emmc_b
     symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/by-name/preloader_ufs_a
     symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/by-name/preloader_ufs_b
-
-    exec u:r:update_engine:s0 root root -- /system/bin/mtk_plpath_utils
 
     export ANDROID_ROOT /system_root

@@ -12,15 +12,7 @@ ro.board.platform=mt6768
 persist.sys.usb.config=mtp
 sys.usb.controller=musb-hdrc
 
-# Encryption
-#ro.crypto.metadata_init_delete_all_keys.enabled=false
-ro.crypto.volume.filenames_mode=aes-256-cts
-ro.crypto.allow_encrypt_override=true
-ro.crypto.volume.options=::v2
-
-# Disable Rescue Party
-persist.sys.disable_rescue=true
-
-# AVB
-#ro.boot.avb_version=1.2
-#ro.boot.vbmeta.avb_version=1.2
+# Crypto
+ro.security.keystore.keytype=sakv2,gak,rkp
+ro.hardware.keystore=mdfpp
+ro.hardware.keystore_desede=true
