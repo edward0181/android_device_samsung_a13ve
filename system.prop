@@ -8,6 +8,12 @@ ro.boot.dynamic_partitions=true
 ro.product.board=mt6768
 ro.board.platform=mt6768
 
+# Boot devices
+ro.boot.boot_devices=bootdevice,soc/11230000.mmc,11230000.mmc
+
+# Disable Rescue Party
+persist.sys.disable_rescue=true
+
 # USB and MTP stuff
 persist.sys.usb.config=mtp
 sys.usb.controller=musb-hdrc
