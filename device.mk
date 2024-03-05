@@ -17,9 +17,6 @@
 # Enable project quotas and casefolding for emulated storage without sdcardfs
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-# VNDK
-PRODUCT_TARGET_VNDK_VERSION := 30
-
 # API
 PRODUCT_SHIPPING_API_LEVEL := 30
 
