@@ -20,6 +20,10 @@
 /product        f2fs                /dev/block/mapper/product                                   flags=backup=1;display="Product";logical
 /product_image  emmc                /dev/block/mapper/product                                   flags=backup=1;display="Product Image";flashimg=1;wipeingui;
 
+# Samsung ODE
+/keydata      emmc     /dev/block/by-name/keydata                       flags=display="Keydata";
+/keyrefuge	  emmc	   /dev/block/by-name/keyrefuge                     flags=display="Keyrefuge";
+
 # FOTA
 /modem			emmc		/dev/block/by-name/apnhlos							flags=backup=1;display="Modem"
 /mdm			emmc		/dev/block/by-name/modem							flags=backup=1;subpartitionof=/modem

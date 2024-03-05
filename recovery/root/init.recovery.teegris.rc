@@ -1,35 +1,22 @@
-on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
-    install_keyring
-
-on fs
-    wait /dev/block/by-name/efs
-    mount ext4 /dev/block/by-name/efs /mnt/vendor/efs nosuid nodev noatime noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic
-    wait /dev/block/by-name/sec_efs
-    mount ext4 /dev/block/by-name/sec_efs /efs nosuid nodev noatime noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic
+on post-fs
+# TEEGRIS service
+    mkdir /mnt/vendor/efs/tee 0700 system system
     mkdir /dev/socket/iwt 0770 system system
     mkdir /dev/socket/iwt/ca 0770 system system
-
-on property:hwservicemanager.ready=true
     start tz_service
     wait_for_prop vendor.tzdaemon Ready
     setprop vendor.TEEGRIS.loaded true
     write /proc/iccc_ready 1
     start tzts_service
     wait_for_prop vendor.tzts_daemon Ready
-    start vendor.keymint-default
-    start vendor.gatekeeper-1-0
 
-on property:twrp.all.users.decrypted=true
-    stop tz_service
-    stop tzts_service
-    stop vendor.keymint-default
-    stop vendor.gatekeeper-1-0
-    umount /mnt/vendor/efs
-    umount /efs
+on post-fs-data
+# TEEGRIS service
+    mkdir /data/vendor/tee 0700 system system
 
 service tz_service /vendor/bin/tzdaemon
     user system
-    group system
+    group system readproc
     setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
     disabled
     seclabel u:r:recovery:s0
@@ -37,21 +24,6 @@ service tz_service /vendor/bin/tzdaemon
 service tzts_service /vendor/bin/tzts_daemon
     user system
     group system
-    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
-    disabled
-    seclabel u:r:recovery:s0
-
-service vendor.keymint-default /vendor/bin/hw/android.hardware.security.keymint-service
-    user system
-    group system drmrpc
-    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
-    disabled
-    seclabel u:r:recovery:s0
-
-service vendor.gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
-    interface android.hardware.gatekeeper@1.0::IGatekeeper default
-    user system
-    group system 5678
     setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
     disabled
     seclabel u:r:recovery:s0
