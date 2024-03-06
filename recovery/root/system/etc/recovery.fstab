@@ -1,12 +1,12 @@
 
 #<src>                                              <mnt_point>   <type>      <mnt_flags and options>    <fs_mgr_flags>
-system			/system       f2fs        ro,barrier=1,discard				wait,logical,first_stage_mount
-system			/system       ext4        ro,barrier=1,discard				wait,logical,first_stage_mount
-system			/system       erofs       ro								wait,logical,first_stage_mount
-vendor			/vendor       f2fs        ro,barrier=1,discard				wait,logical,first_stage_mount
-product			/product      f2fs        ro,barrier=1,discard				wait,logical,first_stage_mount
-odm				/odm          f2fs        ro,barrier=1,discard				wait,logical,first_stage_mount
+system			/system       f2fs        ro				wait,logical,first_stage_mount
+system			/system       ext4        ro				wait,logical,first_stage_mount
+system			/system       erofs       ro				wait,logical,first_stage_mount
+vendor			/vendor       f2fs        ro				wait,logical,first_stage_mount
+product			/product      f2fs        ro				wait,logical,first_stage_mount
+odm				/odm          f2fs        ro				wait,logical,first_stage_mount
 
 /dev/block/by-name/md_udc      				/metadata	ext4	noatime,nosuid,nodev,noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic,sync	wait,formattable,first_stage_mount,check
-/dev/block/bootdevice/by-name/userdata     /data        f2fs    noatime,nosuid,nodev,discard,usrquota,grpquota,fsync_mode=nobarrier,reserve_root=32768,resgid=5678,inlinecrypt	wait,check,,quota,latemount,,reservedsize=128M,checkpoint=fs,encryptable=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption,fscompress
-/dev/block/by-name/misc						/misc       emmc        defaults                  defaults
+/dev/block/by-name/userdata	/data	f2fs	noatime,nosuid,nodev,discard,usrquota,grpquota,fsync_mode=nobarrier,reserve_root=32768,resgid=5678,whint_mode=fs-based,inlinecrypt	wait,check,quota,latemount,reservedsize=128M,checkpoint=fs,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption,fscompressdefaults,first_stage_mount
+/dev/block/by-name/misc						/misc       emmc        defaults                  defaults,first_stage_mount

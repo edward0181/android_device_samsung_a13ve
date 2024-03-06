@@ -22,16 +22,11 @@ PRODUCT_RELEASE_NAME := a13ve
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 
-# Enable project quotas and casefolding for emulated storage without sdcardfs
-$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
-
 # Inherit some common TWRP stuff.
 $(call inherit-product, vendor/twrp/config/common.mk)
 
 # Inherit device configuration
 $(call inherit-product, $(DEVICE_PATH)/device.mk)
-
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/a13ve/recovery/root,recovery/root)
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_NAME := twrp_a13ve

@@ -3,6 +3,7 @@ import /init.recovery.samsung.rc
 
 on early-init
     mkdir /mnt/vendor/efs 0771 radio system
+	start prepdecrypt
 
 on init
     setprop sys.usb.configfs 1
@@ -13,62 +14,35 @@ on fs && property:ro.debuggable=0
     # set charging free due to it wait for USB activation
     start adbd
 
-#on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
-#    install_keyring
 
-service vendor.keymint-default /vendor/bin/hw/android.hardware.security.keymint-service
-    user system
-    group system drmrpc
-    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
+on boot
+	start health-hal-2-1
+
+on post-fs    
+	# Support A/B feature for EMMC and UFS boot region
+    wait /dev/block/mmcblk0boot0 2
+    symlink /dev/block/sda /dev/block/mmcblk0boot0
+    symlink /dev/block/sdb /dev/block/mmcblk0boot1
+    symlink /dev/block/mmcblk0boot0 /dev/block/platform/bootdevice/by-name/preloader_a
+    symlink /dev/block/mmcblk0boot1 /dev/block/platform/bootdevice/by-name/preloader_b
+
+    # Support A/B feature for combo emmc and ufs OTA update
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/platform/bootdevice/by-name/preloader_emmc_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/platform/bootdevice/by-name/preloader_emmc_b
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/platform/bootdevice/by-name/preloader_ufs_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/platform/bootdevice/by-name/preloader_ufs_b
+
+    # Support A/B feature for combo emmc and ufs OTA update
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/by-name/preloader_emmc_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/by-name/preloader_emmc_b
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/by-name/preloader_ufs_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/by-name/preloader_ufs_b
+
+    exec u:r:update_engine:s0 root root -- /system/bin/mtk_plpath_utils
+
+service prepdecrypt /system/bin/prepdecrypt.sh
+	user root
+    group root
     disabled
+    oneshot
     seclabel u:r:recovery:s0
-
-service vendor.gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
-    interface android.hardware.gatekeeper@1.0::IGatekeeper default
-    user system
-    group system 5678
-    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
-    disabled
-    seclabel u:r:recovery:s0
-
-on post-fs
-    mkdir /mnt/vendor/efs/DAK 0775 system system
-    restorecon -R /mnt/vendor/efs/DAK
-    chown system system /mnt/vendor/efs/DAK/gakkeybox
-    chmod 0644 /mnt/vendor/efs/DAK/gakkeybox
-
-on post-fs-data
-    mkdir /data/vendor/keymint 0775 system system
-    mkdir /data/vendor/gatekeeper 0770 system system
-
-on property:hwservicemanager.ready=true
-    start vendor.keymint-default
-    start vendor.gatekeeper-1-0
-
-on property:vendor.sys.listener.registered=true
-    start vendor.keymint-default
-    start vendor.gatekeeper-1-0
-
-on property:ro.crypto.state=unsupported
-    stop tz_service
-    stop tzts_service
-    stop vendor.keymint-default
-    stop vendor.gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
-
-on property:ro.crypto.state=unencrypted
-    stop tz_service
-    stop tzts_service
-    stop vendor.kkeymint-default
-    stop vendor.gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
-
-on property:twrp.decrypt.done=true
-    stop tz_service
-    stop tzts_service
-    stop vendor.keymint-default
-    stop vendor.gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager

@@ -19,9 +19,6 @@ persist.sys.usb.config=mtp
 sys.usb.controller=musb-hdrc
 
 # Crypto
-ro.security.keystore.keytype=sakv2,gak,rkp
+ro.security.keystore.keytype=sakv2,gak
 ro.hardware.keystore=mdfpp
 ro.hardware.keystore_desede=true
-ro.crypto.volume.filenames_mode=aes-256-cts
-ro.crypto.allow_encrypt_override=true
-ro.crypto.volume.options=::v2
