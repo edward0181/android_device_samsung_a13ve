@@ -3,7 +3,6 @@ import /init.recovery.samsung.rc
 
 on early-init
     mkdir /mnt/vendor/efs 0771 radio system
-	start prepdecrypt
 
 on init
     setprop sys.usb.configfs 1
@@ -39,10 +38,3 @@ on post-fs
     symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/by-name/preloader_ufs_b
 
     exec u:r:update_engine:s0 root root -- /system/bin/mtk_plpath_utils
-
-service prepdecrypt /system/bin/prepdecrypt.sh
-	user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:recovery:s0
