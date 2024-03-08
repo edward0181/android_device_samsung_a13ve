@@ -2,14 +2,29 @@ on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
     install_keyring
 
 on fs
-    wait /dev/block/by-name/efs
-    mount ext4 /dev/block/by-name/efs /mnt/vendor/efs nosuid nodev noatime noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic
-    wait /dev/block/by-name/sec_efs
-    mount ext4 /dev/block/by-name/sec_efs /efs nosuid nodev noatime noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic
+    mkdir /efs/tee 0700 system system
+    mkdir /mnt/vendor/efs/tee 0700 system system
+    mkdir /data/vendor/tee 0700 system system
     mkdir /dev/socket/iwt 0770 system system
     mkdir /dev/socket/iwt/ca 0770 system system
 
-on property:hwservicemanager.ready=true && property:crypto.ready=1
+on post-fs
+# Keymint data
+    mkdir /mnt/vendor/efs/DAK 0775 system system
+    restorecon -R /mnt/vendor/efs/DAK
+    chown system system /mnt/vendor/efs/DAK/gakkeybox
+    chmod 0644 /mnt/vendor/efs/DAK/gakkeybox
+
+on post-fs-data
+# TEEGRIS service
+    mkdir /data/vendor/tee 0700 system system
+# Gatekeeper data
+    mkdir /data/vendor/gk 0771 system system
+    mkdir /data/vendor/gatekeeper 0770 system system
+# Keymint data
+    mkdir /data/vendor/keymaster 0775 system system
+	
+on property:hwservicemanager.ready=true
     start tz_service
     wait_for_prop vendor.tzdaemon Ready
     setprop vendor.TEEGRIS.loaded true
@@ -28,30 +43,30 @@ on property:twrp.all.users.decrypted=true
     umount /efs
 
 service tz_service /vendor/bin/tzdaemon
-    user system
-    group system readproc
+    user root
+    group root readproc
     setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
     disabled
     seclabel u:r:recovery:s0
 
 service tzts_service /vendor/bin/tzts_daemon
-    user system
-    group system
+	user root
+    group root
     setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
     disabled
     seclabel u:r:recovery:s0
 
 service vendor.keymint-default /vendor/bin/hw/android.hardware.security.keymint-service
-    user system
-    group system drmrpc
+    user root
+    group root drmrpc
     setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
     disabled
     seclabel u:r:recovery:s0
 
 service vendor.gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
     interface android.hardware.gatekeeper@1.0::IGatekeeper default
-    user system
-    group system 5678
+    user root
+    group root 5678
     setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
     disabled
     seclabel u:r:recovery:s0

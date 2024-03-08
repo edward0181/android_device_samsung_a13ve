@@ -13,7 +13,6 @@ on fs && property:ro.debuggable=0
     # set charging free due to it wait for USB activation
     start adbd
 
-
 on boot
 	start health-hal-2-1
 
