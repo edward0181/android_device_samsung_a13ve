@@ -10,16 +10,16 @@ Thanks @physwizz for compressed kernel Image.gz!!!
 $ mkdir tw; cd tw
 
 # Init repo
-$ repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+$ repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12
 
 # Clone a13ve repo
 $ git clone https://github.com/edward0181/android_device_samsung_a13ve device/samsung/a13ve
 
-# Clone a13ve kernel
+# Clone a13ve kernel if you want...
 $ git clone https://github.com/edward0181/android_kernel_samsung_a13ve kernel/samsung/a13ve
 
 # Sync
-$ repo sync --no-repo-verify -c --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune -j`nproc`
+$ repo sync  -f --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
 
 # Build
 $ source build/envsetup.sh; export ALLOW_MISSING_DEPENDENCIES=true; lunch twrp_a13ve-eng; mka recoveryimage
